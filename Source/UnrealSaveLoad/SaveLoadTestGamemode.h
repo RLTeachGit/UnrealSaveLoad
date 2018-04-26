@@ -35,6 +35,12 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void	SaveMyGame();
+    
+    UFUNCTION(BlueprintCallable)
+    void    LoadMyGame();
+    
+    UFUNCTION(BlueprintCallable)
+    void    ClearMyGame();
 
 private:
 	TArray<ASpawnableActor*>	mActorArray;

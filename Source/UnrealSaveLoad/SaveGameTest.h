@@ -9,6 +9,16 @@
 /**
  * 
  */
+
+USTRUCT()
+struct  FSaveTestObject
+{
+    GENERATED_BODY()
+    
+    UPROPERTY()
+    FVector Position;
+};
+
 UCLASS()
 class UNREALSAVELOAD_API USaveGameTest : public USaveGame
 {
@@ -19,13 +29,16 @@ class UNREALSAVELOAD_API USaveGameTest : public USaveGame
 public:
 	
 	UPROPERTY(VisibleAnywhere, Category = Basic)
-		FString PlayerName;
+    FString PlayerName;
 
 	UPROPERTY(VisibleAnywhere, Category = Basic)
-		FString SaveSlotName;
+    FString SaveSlotName;
 
 	UPROPERTY(VisibleAnywhere, Category = Basic)
-		uint32 UserIndex;
+    uint32 UserIndex;
+    
+    UPROPERTY(VisibleAnywhere, Category = Basic)
+    TArray<FSaveTestObject> SaveObjects;
 	
 	
 };

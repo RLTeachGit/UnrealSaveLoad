@@ -36,10 +36,42 @@ void ASaveLoadTestGamemode::OnSpawnableActorDestroy(ASpawnableActor *vActor)
 	mActorArray.Remove(vActor);
 }
 
+void ASaveLoadTestGamemode::ClearMyGame()
+{
+    while(mActorArray.Num()>0)
+    {
+        ASpawnableActor* tActor = mActorArray.Top();
+        mActorArray.Remove(tActor);
+        tActor->Destroy();
+    }
+}
+
+
+void ASaveLoadTestGamemode::LoadMyGame()
+{
+    FActorSpawnParameters tSpawnParams;
+    tSpawnParams.Owner = this;
+    tSpawnParams.Instigator = Instigator;
+    USaveGameTest* LoadGameInstance = Cast<USaveGameTest>(UGameplayStatics::CreateSaveGameObject(USaveGameTest::StaticClass()));
+    LoadGameInstance = Cast<USaveGameTest>(UGameplayStatics::LoadGameFromSlot(LoadGameInstance->SaveSlotName, LoadGameInstance->UserIndex));
+    FString PlayerNameToDisplay = LoadGameInstance->PlayerName;
+    for(FSaveTestObject tObject : LoadGameInstance->SaveObjects)
+    {
+        ASpawnableActor *tSpawn = GetWorld()->SpawnActor<ASpawnableActor>(mBaseObject,tObject.Position,FRotator::ZeroRotator, tSpawnParams);
+        mActorArray.Add(tSpawn);
+    }
+}
+
 void ASaveLoadTestGamemode::SaveMyGame()
 {
 	UE_LOG(LogTemp, Warning, TEXT("SaveMyGame()"));
 	USaveGameTest* SaveGameInstance = Cast<USaveGameTest>(UGameplayStatics::CreateSaveGameObject(USaveGameTest::StaticClass()));
 	SaveGameInstance->PlayerName = TEXT("PlayerOne");
+    for(ASpawnableActor* tActor : mActorArray)
+    {
+        FSaveTestObject tObject;
+        tObject.Position=tActor->GetActorLocation();
+        SaveGameInstance->SaveObjects.Add(tObject);
+    }
 	UGameplayStatics::SaveGameToSlot(SaveGameInstance, SaveGameInstance->SaveSlotName, SaveGameInstance->UserIndex);
 }
