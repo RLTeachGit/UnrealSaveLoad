@@ -15,8 +15,11 @@ public:
 	// Sets default values for this actor's properties
 	ASpawnableActor();
 
+	//Called when Actor is abotu to go away
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason);
+
 protected:
-	// Called when the game starts or when spawned
+	// Called when the Actor starts
 	virtual void BeginPlay() override;
 
 public:	

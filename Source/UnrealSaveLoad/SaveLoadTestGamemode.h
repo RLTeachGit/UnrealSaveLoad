@@ -8,6 +8,10 @@
 #include "StaticPawn.h"
 #include "SpawnableActor.h"
 #include "Engine/World.h"
+
+#include "SaveGameTest.h"
+#include "Kismet/GameplayStatics.h"
+
 #include "SaveLoadTestGamemode.generated.h"
 
 /**
@@ -26,5 +30,13 @@ public:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<ASpawnableActor> mBaseObject;
 	
-	
+
+	void	OnSpawnableActorDestroy(ASpawnableActor* vActor);
+
+	UFUNCTION(BlueprintCallable)
+	void	SaveMyGame();
+
+private:
+	TArray<ASpawnableActor*>	mActorArray;
+
 };
