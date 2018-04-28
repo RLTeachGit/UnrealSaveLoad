@@ -13,6 +13,7 @@ ASaveLoadTestGamemode::ASaveLoadTestGamemode() : AGameMode()
 	//Use our Pawn
 	DefaultPawnClass = AStaticPawn::StaticClass();
 
+    SaveLoadGame = NewObject<UBasicSaveLoad>();
 
 	//you can set whatever (if any) other default framework classes
 
@@ -20,15 +21,9 @@ ASaveLoadTestGamemode::ASaveLoadTestGamemode() : AGameMode()
 
 void ASaveLoadTestGamemode::SpawnObjectTest()
 {
-	FActorSpawnParameters tSpawnParams;
-	tSpawnParams.Owner = this;
-	tSpawnParams.Instigator = Instigator;
 	FVector	tStartLocation(FMath::FRandRange(-1000,1000), FMath::FRandRange(-1000, 1000), FMath::FRandRange(70, 200));
-	FRotator tStartRotation(0, 0, 0);
 
-	ASpawnableActor *tSpawn = GetWorld()->SpawnActor<ASpawnableActor>(mBaseObject,tStartLocation,FRotator::ZeroRotator, tSpawnParams);
-	UE_LOG(LogTemp, Warning, TEXT("SpawnObjectTestSanityCheck() %x"),tSpawn);
-	mActorArray.Add(tSpawn);
+	SpawnMyActor(tStartLocation);
 }
 
 void ASaveLoadTestGamemode::OnSpawnableActorDestroy(ASpawnableActor *vActor)
@@ -47,6 +42,16 @@ void ASaveLoadTestGamemode::ClearMyGame()
 }
 
 
+ASpawnableActor*    ASaveLoadTestGamemode::SpawnMyActor(FVector& vPosition)
+{
+    FActorSpawnParameters tSpawnParams;
+    tSpawnParams.Owner = this;
+    tSpawnParams.Instigator = Instigator;
+    ASpawnableActor *tSpawn = GetWorld()->SpawnActor<ASpawnableActor>(mBaseObject,vPosition,FRotator::ZeroRotator, tSpawnParams);
+    mActorArray.Add(tSpawn);
+    return  tSpawn;
+}
+
 void ASaveLoadTestGamemode::LoadMyGame()
 {
     FActorSpawnParameters tSpawnParams;
@@ -60,6 +65,18 @@ void ASaveLoadTestGamemode::LoadMyGame()
         ASpawnableActor *tSpawn = GetWorld()->SpawnActor<ASpawnableActor>(mBaseObject,tObject.Position,FRotator::ZeroRotator, tSpawnParams);
         mActorArray.Add(tSpawn);
     }
+}
+
+void ASaveLoadTestGamemode::TestSave()
+{
+    int32   tTest=1234;
+    SaveLoadGame->SaveGame(tTest,this);
+}
+
+void ASaveLoadTestGamemode::TestLoad()
+{
+    int32   tTest=-1;
+    SaveLoadGame->LoadGame(tTest,this);
 }
 
 void ASaveLoadTestGamemode::SaveMyGame()

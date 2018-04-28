@@ -28,6 +28,7 @@ class UNREALSAVELOAD_API USaveGameTest : public USaveGame
 
 public:
 	
+    
 	UPROPERTY(VisibleAnywhere, Category = Basic)
     FString PlayerName;
 

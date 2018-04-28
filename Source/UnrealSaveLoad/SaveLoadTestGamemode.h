@@ -2,6 +2,9 @@
 
 #pragma once
 
+
+class   UBasicSaveLoad;
+
 #include "CoreMinimal.h"
 #include "GameFramework/GameMode.h"
 #include "NoMouseLookPlayerController.h"
@@ -11,6 +14,8 @@
 
 #include "SaveGameTest.h"
 #include "Kismet/GameplayStatics.h"
+
+#include "BasicSaveLoad.h"
 
 #include "SaveLoadTestGamemode.generated.h"
 
@@ -33,6 +38,10 @@ public:
 
 	void	OnSpawnableActorDestroy(ASpawnableActor* vActor);
 
+    
+    ASpawnableActor* SpawnMyActor(FVector& vPosition);
+
+    
 	UFUNCTION(BlueprintCallable)
 	void	SaveMyGame();
     
@@ -41,8 +50,17 @@ public:
     
     UFUNCTION(BlueprintCallable)
     void    ClearMyGame();
+    
+    UFUNCTION(BlueprintCallable)
+    void    TestLoad();
+    
+    UFUNCTION(BlueprintCallable)
+    void    TestSave();
 
-private:
+    UPROPERTY()
+    UBasicSaveLoad*  SaveLoadGame;
+
+public:
 	TArray<ASpawnableActor*>	mActorArray;
 
 };
