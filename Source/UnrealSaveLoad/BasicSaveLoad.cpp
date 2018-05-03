@@ -44,6 +44,10 @@ bool    UBasicSaveLoad::LoadGame(int32& vVersionNumber,ASaveLoadTestGamemode* vG
     TArray<uint8> TheBinaryArray;
     if (FFileHelper::LoadFileToArray(TheBinaryArray, *tFilename))
     {
+        FActorSpawnParameters tSpawnParams;
+        tSpawnParams.Owner = vGameMode;
+        tSpawnParams.Instigator = vGameMode->Instigator;
+        
         int32   tBytes=TheBinaryArray.Num();
         if(tBytes >= 0)
         {
@@ -52,14 +56,14 @@ bool    UBasicSaveLoad::LoadGame(int32& vVersionNumber,ASaveLoadTestGamemode* vG
             FSaveFile       tSaveFile;
             int32           tVersionNumber=-1;
             SaveLoad(FromBinary,tVersionNumber,tSaveFile);
-
-
+            
+            
             for(FBasicActorSave tActorSave : tSaveFile.Actors)
             {
-                ASpawnableActor *tSpawn = GetWorld()->SpawnActor<ASpawnableActor>(mBaseObject,tObject.Position,FRotator::ZeroRotator, tSpawnParams);
-                mActorArray.Add(tSpawn);
+                ASpawnableActor *tSpawn = GetWorld()->SpawnActor<ASpawnableActor>(vGameMode->mBaseObject,tActorSave.Position,FRotator::ZeroRotator, tSpawnParams);
+                vGameMode->mActorArray.Add(tSpawn);
             }
-
+            
             
             
             FromBinary.FlushCache();
@@ -67,7 +71,7 @@ bool    UBasicSaveLoad::LoadGame(int32& vVersionNumber,ASaveLoadTestGamemode* vG
             TheBinaryArray.Empty();
             FromBinary.Close();
             GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Loaded: %s %d bytes Content Version:%d"), *tFilename,tBytes,tVersionNumber));
-
+            
             return true;
         }
     }
