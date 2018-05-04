@@ -38,6 +38,9 @@ bool    UBasicSaveLoad::SaveGame(int32& vVersionNumber,ASaveLoadTestGamemode* vG
 }
 
 
+
+
+//Any class derived from just UObject has GetWorld() return NULL, so any swawn code using this will crash & burn
 bool    UBasicSaveLoad::LoadGame(int32& vVersionNumber,ASaveLoadTestGamemode* vGameMode)
 {
     FString tFilename=FPaths::ProjectSavedDir() + "\\SaveGame.rl";
@@ -60,7 +63,8 @@ bool    UBasicSaveLoad::LoadGame(int32& vVersionNumber,ASaveLoadTestGamemode* vG
             
             for(FBasicActorSave tActorSave : tSaveFile.Actors)
             {
-                ASpawnableActor *tSpawn = GetWorld()->SpawnActor<ASpawnableActor>(vGameMode->mBaseObject,tActorSave.Position,FRotator::ZeroRotator, tSpawnParams);
+                //Use GetWorld() from caller
+                ASpawnableActor *tSpawn = vGameMode->GetWorld()->SpawnActor<ASpawnableActor>(vGameMode->mBaseObject,tActorSave.Position,FRotator::ZeroRotator, tSpawnParams);
                 vGameMode->mActorArray.Add(tSpawn);
             }
             
