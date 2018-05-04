@@ -47,7 +47,6 @@ bool    UBasicSaveLoad::LoadGame(int32& vVersionNumber,ASaveLoadTestGamemode* vG
         FActorSpawnParameters tSpawnParams;
         tSpawnParams.Owner = vGameMode;
         tSpawnParams.Instigator = vGameMode->Instigator;
-        
         int32   tBytes=TheBinaryArray.Num();
         if(tBytes >= 0)
         {
@@ -56,7 +55,8 @@ bool    UBasicSaveLoad::LoadGame(int32& vVersionNumber,ASaveLoadTestGamemode* vG
             FSaveFile       tSaveFile;
             int32           tVersionNumber=-1;
             SaveLoad(FromBinary,tVersionNumber,tSaveFile);
-            
+            UE_LOG(LogTemp, Warning, TEXT("Version %d"),vVersionNumber);
+
             
             for(FBasicActorSave tActorSave : tSaveFile.Actors)
             {
