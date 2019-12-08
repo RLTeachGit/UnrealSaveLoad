@@ -39,7 +39,8 @@ public:
 	void	OnSpawnableActorDestroy(ASpawnableActor* vActor);
 
     
-    ASpawnableActor* SpawnMyActor(FVector& vPosition);
+	UFUNCTION(BlueprintCallable)
+	ASpawnableActor* SpawnMyActor(const FVector& Position,const FRotator& Rotation);
 
     
 	UFUNCTION(BlueprintCallable)
@@ -60,7 +61,17 @@ public:
     UPROPERTY()
     UBasicSaveLoad*  SaveLoadGame;
 
+
 public:
 	TArray<ASpawnableActor*>	mActorArray;
+
+
+private: //Spawn Range
+	float	XMin = -200.0;
+	float	XMax = 200.0;
+	float	YMin = -200.0;
+	float	YMax = 200.0;
+	float	ZMin = 70.0;
+	float	ZMax = 200.0;
 
 };

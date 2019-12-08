@@ -13,7 +13,7 @@ ASaveLoadTestGamemode::ASaveLoadTestGamemode() : AGameMode()
 	//Use our Pawn
 	DefaultPawnClass = AStaticPawn::StaticClass();
 
-    SaveLoadGame = NewObject<UBasicSaveLoad>();
+    SaveLoadGame = NewObject<UBasicSaveLoad>(); //Add Save Load code
 
 	//you can set whatever (if any) other default framework classes
 
@@ -21,16 +21,18 @@ ASaveLoadTestGamemode::ASaveLoadTestGamemode() : AGameMode()
 
 void ASaveLoadTestGamemode::SpawnObjectTest()
 {
-	FVector	tStartLocation(FMath::FRandRange(-1000,1000), FMath::FRandRange(-1000, 1000), FMath::FRandRange(70, 200));
-
-	SpawnMyActor(tStartLocation);
+	FVector	tStartLocation(FMath::FRandRange(XMin, XMax), FMath::FRandRange(YMin, YMax), FMath::FRandRange(ZMin, ZMax));
+	FRotator tRotator = FRotator(FMath::FRandRange(0, 360), FMath::FRandRange(0, 360), FMath::FRandRange(0, 360));
+	SpawnMyActor(tStartLocation, tRotator);
 }
 
+//Remove from scene
 void ASaveLoadTestGamemode::OnSpawnableActorDestroy(ASpawnableActor *vActor)
 {
 	mActorArray.Remove(vActor);
 }
 
+//Remove all from scene
 void ASaveLoadTestGamemode::ClearMyGame()
 {
     while(mActorArray.Num()>0)
@@ -42,30 +44,18 @@ void ASaveLoadTestGamemode::ClearMyGame()
 }
 
 
-ASpawnableActor*    ASaveLoadTestGamemode::SpawnMyActor(FVector& vPosition)
+//Span a new actor at location
+ASpawnableActor*    ASaveLoadTestGamemode::SpawnMyActor(const FVector& Position, const FRotator& Rotation)
 {
     FActorSpawnParameters tSpawnParams;
     tSpawnParams.Owner = this;
     tSpawnParams.Instigator = Instigator;
-    ASpawnableActor *tSpawn = GetWorld()->SpawnActor<ASpawnableActor>(mBaseObject,vPosition,FRotator::ZeroRotator, tSpawnParams);
+    ASpawnableActor *tSpawn = GetWorld()->SpawnActor<ASpawnableActor>(mBaseObject,Position, Rotation, tSpawnParams);
     mActorArray.Add(tSpawn);
     return  tSpawn;
 }
 
-void ASaveLoadTestGamemode::LoadMyGame()
-{
-    FActorSpawnParameters tSpawnParams;
-    tSpawnParams.Owner = this;
-    tSpawnParams.Instigator = Instigator;
-    USaveGameTest* LoadGameInstance = Cast<USaveGameTest>(UGameplayStatics::CreateSaveGameObject(USaveGameTest::StaticClass()));
-    LoadGameInstance = Cast<USaveGameTest>(UGameplayStatics::LoadGameFromSlot(LoadGameInstance->SaveSlotName, LoadGameInstance->UserIndex));
-    FString PlayerNameToDisplay = LoadGameInstance->PlayerName;
-    for(FSaveTestObject tObject : LoadGameInstance->SaveObjects)
-    {
-        ASpawnableActor *tSpawn = GetWorld()->SpawnActor<ASpawnableActor>(mBaseObject,tObject.Position,FRotator::ZeroRotator, tSpawnParams);
-        mActorArray.Add(tSpawn);
-    }
-}
+
 
 void ASaveLoadTestGamemode::TestSave()
 {
@@ -79,6 +69,26 @@ void ASaveLoadTestGamemode::TestLoad()
     SaveLoadGame->LoadGame(tTest,this);
 }
 
+
+
+//Simple Load
+
+void ASaveLoadTestGamemode::LoadMyGame()
+{
+	FActorSpawnParameters tSpawnParams;
+	tSpawnParams.Owner = this;
+	tSpawnParams.Instigator = Instigator;
+	USaveGameTest* LoadGameInstance = Cast<USaveGameTest>(UGameplayStatics::CreateSaveGameObject(USaveGameTest::StaticClass()));
+	LoadGameInstance = Cast<USaveGameTest>(UGameplayStatics::LoadGameFromSlot(LoadGameInstance->SaveSlotName, LoadGameInstance->UserIndex));
+	FString PlayerNameToDisplay = LoadGameInstance->PlayerName;
+	for (FSaveTestObject tObject : LoadGameInstance->SaveObjects)
+	{
+		ASpawnableActor *tSpawn = GetWorld()->SpawnActor<ASpawnableActor>(mBaseObject, tObject.Position, FRotator::ZeroRotator, tSpawnParams);
+		mActorArray.Add(tSpawn);
+	}
+}
+
+//Simple Save
 void ASaveLoadTestGamemode::SaveMyGame()
 {
 	UE_LOG(LogTemp, Warning, TEXT("SaveMyGame()"));

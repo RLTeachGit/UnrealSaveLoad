@@ -24,8 +24,10 @@ struct  FBasicActorSave
 {
     GENERATED_BODY()
     
-    UPROPERTY()
-    FVector Position;
+	UPROPERTY()
+	FVector Position;
+	UPROPERTY()
+	FRotator Rotation;
 };
 
 
@@ -43,8 +45,9 @@ struct  FSaveFile
 FORCEINLINE FArchive& operator<<(FArchive &Ar, FBasicActorSave& vActorData )
 {
     
-    Ar << vActorData.Position;
-    
+    Ar << vActorData.Position; //Save/Load Position
+	Ar << vActorData.Rotation;	//Save/Load Rotation
+
     return Ar;
 }
 

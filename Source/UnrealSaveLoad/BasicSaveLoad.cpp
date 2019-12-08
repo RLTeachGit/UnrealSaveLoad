@@ -19,6 +19,7 @@ bool    UBasicSaveLoad::SaveGame(int32& vVersionNumber,ASaveLoadTestGamemode* vG
     {
         FBasicActorSave tActorSave;
         tActorSave.Position=tActor->GetActorLocation();
+		tActorSave.Rotation = tActor->GetActorRotation();
         tSaveFile.Actors.Add(tActorSave);
     }
     SaveLoad(ToBinary,vVersionNumber,tSaveFile);
@@ -64,7 +65,7 @@ bool    UBasicSaveLoad::LoadGame(int32& vVersionNumber,ASaveLoadTestGamemode* vG
             for(FBasicActorSave tActorSave : tSaveFile.Actors)
             {
                 //Use GetWorld() from caller
-                ASpawnableActor *tSpawn = vGameMode->GetWorld()->SpawnActor<ASpawnableActor>(vGameMode->mBaseObject,tActorSave.Position,FRotator::ZeroRotator, tSpawnParams);
+                ASpawnableActor *tSpawn = vGameMode->GetWorld()->SpawnActor<ASpawnableActor>(vGameMode->mBaseObject,tActorSave.Position,tActorSave.Rotation, tSpawnParams);
                 vGameMode->mActorArray.Add(tSpawn);
             }
             
