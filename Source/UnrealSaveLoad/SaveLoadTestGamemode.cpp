@@ -79,8 +79,8 @@ void ASaveLoadTestGamemode::BasicLoadGame()
 	FActorSpawnParameters tSpawnParams;
 	tSpawnParams.Owner = this;
 	tSpawnParams.Instigator = Instigator;
-	UBasicSaveGame* LoadGameInstance = Cast<UBasicSaveGame>(UGameplayStatics::CreateSaveGameObject(UBasicSaveGame::StaticClass()));
-	LoadGameInstance = Cast<UBasicSaveGame>(UGameplayStatics::LoadGameFromSlot(LoadGameInstance->SaveSlotName, LoadGameInstance->UserIndex));
+	UBasicSaveLoad* LoadGameInstance = Cast<UBasicSaveLoad>(UGameplayStatics::CreateSaveGameObject(UBasicSaveLoad::StaticClass()));
+	LoadGameInstance = Cast<UBasicSaveLoad>(UGameplayStatics::LoadGameFromSlot(LoadGameInstance->SaveSlotName, LoadGameInstance->UserIndex));
 	FString PlayerNameToDisplay = LoadGameInstance->PlayerName;
 	for (FBasicSaveObject tObject : LoadGameInstance->SaveObjects)
 	{
@@ -93,7 +93,7 @@ void ASaveLoadTestGamemode::BasicLoadGame()
 void ASaveLoadTestGamemode::BasicSaveGame()
 {
 	UE_LOG(LogTemp, Warning, TEXT("SaveMyGame()"));
-	UBasicSaveGame* SaveGameInstance = Cast<UBasicSaveGame>(UGameplayStatics::CreateSaveGameObject(UBasicSaveGame::StaticClass()));
+	UBasicSaveLoad* SaveGameInstance = Cast<UBasicSaveLoad>(UGameplayStatics::CreateSaveGameObject(UBasicSaveLoad::StaticClass()));
 	SaveGameInstance->PlayerName = TEXT("PlayerOne");
     for(ASpawnableActor* tActor : mActorArray)
     {

@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/SaveGame.h"
-#include "BasicSaveGame.generated.h"
+#include "BasicSaveLoad.generated.h"
 
 /**
  * 
@@ -15,16 +15,17 @@ struct  FBasicSaveObject
 {
 	GENERATED_BODY()
 
-		UPROPERTY()
-		FVector Position;
+	UPROPERTY()
+	FVector Position;
+
 };
 
 
 UCLASS()
-class UNREALSAVELOAD_API UBasicSaveGame : public USaveGame
+class UNREALSAVELOAD_API UBasicSaveLoad : public USaveGame
 {
 	GENERATED_BODY()
-	UBasicSaveGame();
+	UBasicSaveLoad();
 
 public:
 	UPROPERTY(VisibleAnywhere, Category = Basic)
