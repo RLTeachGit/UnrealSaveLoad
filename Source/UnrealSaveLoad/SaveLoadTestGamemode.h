@@ -3,7 +3,7 @@
 #pragma once
 
 
-class   UBasicSaveLoad;
+
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameMode.h"
@@ -12,12 +12,16 @@ class   UBasicSaveLoad;
 #include "SpawnableActor.h"
 #include "Engine/World.h"
 
-#include "SaveGameTest.h"
+#include "BasicSaveGame.h"
 #include "Kismet/GameplayStatics.h"
 
-#include "BasicSaveLoad.h"
+#include "AdvancedSaveLoad.h"
 
 #include "SaveLoadTestGamemode.generated.h"
+
+class   UBasicSaveLoad;
+class	UAdvancedSaveLoad;
+class	ASaveLoadTestGamemode;
 
 /**
  * 
@@ -44,22 +48,22 @@ public:
 
     
 	UFUNCTION(BlueprintCallable)
-	void	SaveMyGame();
+	void	BasicSaveGame();
     
     UFUNCTION(BlueprintCallable)
-    void    LoadMyGame();
+    void    BasicLoadGame();
     
     UFUNCTION(BlueprintCallable)
     void    ClearMyGame();
     
     UFUNCTION(BlueprintCallable)
-    void    TestLoad();
+    void    AdvancedLoadGame();
     
     UFUNCTION(BlueprintCallable)
-    void    TestSave();
+    void    AdvancedSaveGame();
 
     UPROPERTY()
-    UBasicSaveLoad*  SaveLoadGame;
+	UAdvancedSaveLoad*  AdvancedSaveLoadGame;
 
 
 public:

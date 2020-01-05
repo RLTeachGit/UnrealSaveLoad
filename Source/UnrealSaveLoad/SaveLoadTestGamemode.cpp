@@ -1,7 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "SaveLoadTestGamemode.h"
 
+
+#include "SaveLoadTestGamemode.h"
 
 ASaveLoadTestGamemode::ASaveLoadTestGamemode() : AGameMode()
 {
@@ -13,7 +14,7 @@ ASaveLoadTestGamemode::ASaveLoadTestGamemode() : AGameMode()
 	//Use our Pawn
 	DefaultPawnClass = AStaticPawn::StaticClass();
 
-    SaveLoadGame = NewObject<UBasicSaveLoad>(); //Add Save Load code
+    AdvancedSaveLoadGame = NewObject<UAdvancedSaveLoad>(); //Add Save Load code
 
 	//you can set whatever (if any) other default framework classes
 
@@ -57,31 +58,31 @@ ASpawnableActor*    ASaveLoadTestGamemode::SpawnMyActor(const FVector& Position,
 
 
 
-void ASaveLoadTestGamemode::TestSave()
+void ASaveLoadTestGamemode::AdvancedSaveGame()
 {
     int32   tTest=1234;
-    SaveLoadGame->SaveGame(tTest,this);
+    AdvancedSaveLoadGame->SaveGame(tTest,this);
 }
 
-void ASaveLoadTestGamemode::TestLoad()
+void ASaveLoadTestGamemode::AdvancedLoadGame()
 {
     int32   tTest=-1;
-    SaveLoadGame->LoadGame(tTest,this);
+    AdvancedSaveLoadGame->LoadGame(tTest,this);
 }
 
 
 
 //Simple Load
 
-void ASaveLoadTestGamemode::LoadMyGame()
+void ASaveLoadTestGamemode::BasicLoadGame()
 {
 	FActorSpawnParameters tSpawnParams;
 	tSpawnParams.Owner = this;
 	tSpawnParams.Instigator = Instigator;
-	USaveGameTest* LoadGameInstance = Cast<USaveGameTest>(UGameplayStatics::CreateSaveGameObject(USaveGameTest::StaticClass()));
-	LoadGameInstance = Cast<USaveGameTest>(UGameplayStatics::LoadGameFromSlot(LoadGameInstance->SaveSlotName, LoadGameInstance->UserIndex));
+	UBasicSaveGame* LoadGameInstance = Cast<UBasicSaveGame>(UGameplayStatics::CreateSaveGameObject(UBasicSaveGame::StaticClass()));
+	LoadGameInstance = Cast<UBasicSaveGame>(UGameplayStatics::LoadGameFromSlot(LoadGameInstance->SaveSlotName, LoadGameInstance->UserIndex));
 	FString PlayerNameToDisplay = LoadGameInstance->PlayerName;
-	for (FSaveTestObject tObject : LoadGameInstance->SaveObjects)
+	for (FBasicSaveObject tObject : LoadGameInstance->SaveObjects)
 	{
 		ASpawnableActor *tSpawn = GetWorld()->SpawnActor<ASpawnableActor>(mBaseObject, tObject.Position, FRotator::ZeroRotator, tSpawnParams);
 		mActorArray.Add(tSpawn);
@@ -89,14 +90,14 @@ void ASaveLoadTestGamemode::LoadMyGame()
 }
 
 //Simple Save
-void ASaveLoadTestGamemode::SaveMyGame()
+void ASaveLoadTestGamemode::BasicSaveGame()
 {
 	UE_LOG(LogTemp, Warning, TEXT("SaveMyGame()"));
-	USaveGameTest* SaveGameInstance = Cast<USaveGameTest>(UGameplayStatics::CreateSaveGameObject(USaveGameTest::StaticClass()));
+	UBasicSaveGame* SaveGameInstance = Cast<UBasicSaveGame>(UGameplayStatics::CreateSaveGameObject(UBasicSaveGame::StaticClass()));
 	SaveGameInstance->PlayerName = TEXT("PlayerOne");
     for(ASpawnableActor* tActor : mActorArray)
     {
-        FSaveTestObject tObject;
+        FBasicSaveObject tObject;
         tObject.Position=tActor->GetActorLocation();
         SaveGameInstance->SaveObjects.Add(tObject);
     }

@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "SpawnableActor.generated.h"
 
+class   ASaveLoadTestGamemode;
+
 UCLASS()
 class UNREALSAVELOAD_API ASpawnableActor : public AActor
 {
@@ -26,6 +28,5 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	
 	
 };
