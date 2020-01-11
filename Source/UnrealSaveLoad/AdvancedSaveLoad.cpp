@@ -14,7 +14,7 @@ void    UAdvancedSaveLoad::SaveLoad(FArchive& vArchive, int32& vVersionNumber, F
 bool    UAdvancedSaveLoad::SaveGame(int32& vVersionNumber, ASaveLoadTestGamemode* vGameMode)
 {
     FString tFilename = FPaths::ProjectSavedDir() + "\\SaveGame.rl";
-    FBufferArchive  ToBinary;
+    FBufferArchive          ToBinary;
     FAdvancedSaveFile       tSaveFile;
     for (AActor* tActor : vGameMode->mActorArray)    //Make a temp list of basic Actor restore Data
     {

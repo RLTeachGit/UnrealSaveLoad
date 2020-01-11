@@ -17,6 +17,8 @@
 
 #include "AdvancedSaveLoad.h"
 
+#include "SaveLoadWithColour.h"
+
 #include "SaveLoadTestGamemode.generated.h"
 
 class   UBasicSaveLoad;
@@ -55,16 +57,29 @@ public:
     
     UFUNCTION(BlueprintCallable)
     void    ClearMyGame();
-    
+
+	UFUNCTION(BlueprintCallable)
+	void    ClearMyGameNoArray();
+
+
     UFUNCTION(BlueprintCallable)
     void    AdvancedLoadGame();
     
     UFUNCTION(BlueprintCallable)
     void    AdvancedSaveGame();
 
+	UFUNCTION(BlueprintCallable)
+		void    ColourLoadGame();
+
+	UFUNCTION(BlueprintCallable)
+	void    ColourSaveGame(int32 vVersion=1);
+
+
     UPROPERTY()
 	UAdvancedSaveLoad*  AdvancedSaveLoadGame;
 
+	UPROPERTY()
+	USaveLoadWithColour* SaveLoadWithColour;
 
 public:
 	TArray<ASpawnableActor*>	mActorArray;

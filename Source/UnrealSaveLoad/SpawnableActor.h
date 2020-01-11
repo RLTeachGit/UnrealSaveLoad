@@ -28,5 +28,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	void SetColour(FLinearColor& Colour);
+
+	bool GetColour(FLinearColor& Colour);
+
 
 };

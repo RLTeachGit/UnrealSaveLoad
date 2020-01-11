@@ -5,11 +5,11 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataAsset.h"
+
+
 #include "Runtime/Core/Public/Serialization/BufferArchive.h"
 #include "Runtime/Core/Public/Misc/FileHelper.h"
 #include "Runtime/Core/Public/Misc/Paths.h"
-#include <EngineGlobals.h>
-#include <Runtime/Engine/Classes/Engine/Engine.h>
 #include "Runtime/Core/Public/Serialization/MemoryReader.h"
 #include "SaveLoadTestGamemode.h"
 
@@ -17,9 +17,6 @@
 
 #include "AdvancedSaveLoad.generated.h"
 
-class   UBasicSaveLoad;
-class	UAdvancedSaveLoad;
-class	ASaveLoadTestGamemode;
 
 //Classes for Saving
 

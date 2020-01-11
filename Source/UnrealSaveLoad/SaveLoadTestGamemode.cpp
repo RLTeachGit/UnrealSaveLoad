@@ -14,11 +14,14 @@ ASaveLoadTestGamemode::ASaveLoadTestGamemode() : AGameMode()
 	//Use our Pawn
 	DefaultPawnClass = AStaticPawn::StaticClass();
 
-    AdvancedSaveLoadGame = NewObject<UAdvancedSaveLoad>(); //Add Save Load code
+	AdvancedSaveLoadGame = NewObject<UAdvancedSaveLoad>(); //Add Save Load code
 
-	//you can set whatever (if any) other default framework classes
+
+	SaveLoadWithColour = NewObject<USaveLoadWithColour>();	//Colour Save routine
 
 }
+
+
 
 void ASaveLoadTestGamemode::SpawnObjectTest()
 {
@@ -44,6 +47,20 @@ void ASaveLoadTestGamemode::ClearMyGame()
     }
 }
 
+void ASaveLoadTestGamemode::ClearMyGameNoArray()
+{
+	TArray<AActor*> FoundActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ASpawnableActor::StaticClass(), FoundActors);
+	while (FoundActors.Num() > 0)
+	{
+		AActor* tActor = FoundActors.Top();
+		FoundActors.Remove(tActor);
+		tActor->Destroy();
+	}
+}
+
+
+
 
 //Span a new actor at location
 ASpawnableActor*    ASaveLoadTestGamemode::SpawnMyActor(const FVector& Position, const FRotator& Rotation)
@@ -52,6 +69,8 @@ ASpawnableActor*    ASaveLoadTestGamemode::SpawnMyActor(const FVector& Position,
     tSpawnParams.Owner = this;
     tSpawnParams.Instigator = Instigator;
     ASpawnableActor *tSpawn = GetWorld()->SpawnActor<ASpawnableActor>(mBaseObject,Position, Rotation, tSpawnParams);
+	FLinearColor tColour(FMath::RandRange(0.0f, 1.0f), FMath::RandRange(0.0f, 1.0f), FMath::RandRange(0.0f, 1.0f));
+	tSpawn->SetColour(tColour);
     mActorArray.Add(tSpawn);
     return  tSpawn;
 }
@@ -63,6 +82,8 @@ void ASaveLoadTestGamemode::AdvancedSaveGame()
     int32   tTest=1234;
     AdvancedSaveLoadGame->SaveGame(tTest,this);
 }
+
+
 
 void ASaveLoadTestGamemode::AdvancedLoadGame()
 {
@@ -102,4 +123,20 @@ void ASaveLoadTestGamemode::BasicSaveGame()
         SaveGameInstance->SaveObjects.Add(tObject);
     }
 	UGameplayStatics::SaveGameToSlot(SaveGameInstance, SaveGameInstance->SaveSlotName, SaveGameInstance->UserIndex);
+}
+
+
+
+// New version, called from UI
+
+
+void ASaveLoadTestGamemode::ColourLoadGame()
+{
+	int32 tVersion = -1; //Invalidate
+	SaveLoadWithColour->LoadGame(GetWorld(), mBaseObject);
+}
+
+void ASaveLoadTestGamemode::ColourSaveGame(int32 vVersion)
+{
+	SaveLoadWithColour->SaveGame(vVersion, GetWorld());
 }
